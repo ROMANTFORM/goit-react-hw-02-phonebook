@@ -25,12 +25,14 @@ class Form extends Component {
         });
     };
 
-    onSearchInput = evt => {
-        this.setState({ filter: evt.target.value })
-        const userName = this.state.contacts.filter(contact => contact.name.toLowerCase().includes(this.state.filter))
-        
-        this.setState({contacts: [...userName]})
+    filterContacts = evt => this.setState({filter: evt.target.value})
+
+    onSearchInput = () => {
+        console.log(this.state.contacts)
+       return this.state.contacts.filter(contact => contact.name.toLowerCase().includes(this.state.filter));
     };
+        
+   
 
     handleSubmit = evt => {
         evt.preventDefault();
@@ -46,7 +48,9 @@ class Form extends Component {
         this.state.contacts.map(contact => {
             if (contact.name === valueName && contact.number === valueNumber) {
                 alert(`${valueName} is already in contacts!`)
+                return;
             }
+            
         });
 
         this.setState(prevState =>
@@ -59,13 +63,14 @@ class Form extends Component {
     };
 
     render() {
+        const filterContacts = this.onSearchInput()
         return (
             <div className="Container">
                 <h2>Phonebook</h2>
                 <ContactForm props={this}/>
                 <h2>Contacts</h2>
-                <Filter onSearchInput={this.onSearchInput } />
-                <ContactList contacts={this.state.contacts} onDeleteContact={this.deleteContact}  />
+                <Filter onSearchInput={this.filterContacts } />
+                <ContactList contacts={filterContacts} onDeleteContact={this.deleteContact}  />
                 </div>
         )
     };
